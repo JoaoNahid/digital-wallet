@@ -10,6 +10,15 @@ class Wallet extends Model
 {
     Use HasUlids, SoftDeletes;
 
+    protected $fillable = [
+        'user_id',
+        'balance',
+    ];
+
+    protected $casts = [
+        'balance' => 'decimal:2',
+    ];
+
     // Relations
     public function user() {
         return $this->belongsTo(User::class);
