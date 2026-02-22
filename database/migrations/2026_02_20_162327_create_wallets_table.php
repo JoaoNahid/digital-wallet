@@ -18,6 +18,9 @@ return new class extends Migration
             $table->decimal('balance', 15, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->unique('user_id');
+            $table->index('balance');
         });
     }
 
