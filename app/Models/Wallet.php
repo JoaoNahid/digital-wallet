@@ -27,4 +27,13 @@ class Wallet extends Model
     public function transactions() {
         return $this->hasMany(Transaction::class);
     }
+
+    public function getFormattedBalanceAttribute(): string {
+        return 'R$ ' . number_format($this->balance, 2, ',', '.');
+    }
+
+    public function getIsNegativeAttribute(): bool {
+        return $this->balance < 0;
+    }
+
 }
