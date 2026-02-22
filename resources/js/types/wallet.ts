@@ -12,3 +12,8 @@ export interface Wallet {
     updated_at: string
 }
 
+// Form Data
+export interface DepositFormData {
+    amount: string
+    description: string
+}
