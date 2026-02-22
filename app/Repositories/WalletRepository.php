@@ -15,4 +15,8 @@ class WalletRepository implements WalletRepositoryInterface
             'balance' => 0,
         ]);
     }
+
+    public function findByUserId(int $userId): ?Wallet {
+        return Wallet::where('user_id', $userId)->first();
+    }
 }

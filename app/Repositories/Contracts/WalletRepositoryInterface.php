@@ -7,4 +7,6 @@ use App\Models\Wallet;
 
 interface WalletRepositoryInterface {
     public function createForUser(User $user): Wallet;
+
+    public function findByUserId(int $userId): ?Wallet;
 }
