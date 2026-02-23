@@ -36,4 +36,16 @@ class Wallet extends Model
         return $this->balance < 0;
     }
 
+
+    public function hasSufficientBalance(float $p_Amount): bool {
+        return $this->balance >= $p_Amount;
+    }
+
+    public function credit(float $p_Amount): void {
+        $this->increment('balance', $p_Amount);
+    }
+
+    public function debit(float $p_Amount): void {
+        $this->decrement('balance', $p_Amount);
+    }
 }
