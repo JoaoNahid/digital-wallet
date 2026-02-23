@@ -31,4 +31,20 @@ class WalletService
     public function debitWallet(Wallet $p_Wallet, float $p_Amount): void {
         $this->m_WalletRepository->updateBalance($p_Wallet, $p_Amount, 'debit');
     }
+
+    public function findWalletByEmail(string $email): ?Wallet {
+        return $this->m_WalletRepository->findByUserEmail($email);
+    }
+
+    public function validateNotSelfTransfer(Wallet $from, Wallet $to): void {
+        if ($from->id === $to->id) {
+            throw new SelfTransferException();
+        }
+    }
+
+    public function validateSufficientBalance(Wallet $wallet, float $amount): void {
+        if (!$wallet->hasSufficientBalance($amount)) {
+            throw new InsufficientBalanceException($wallet->balance, $amount);
+        }
+    }
 }
