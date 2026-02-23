@@ -4,7 +4,9 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import WalletCard from '@/components/wallet/WalletCard.vue'
 import WalletActions from '@/components/wallet/WalletActions.vue'
 import DepositModal from '@/components/wallet/DepositModal.vue'
-import { Head } from '@inertiajs/vue3'
+import TransferModal from '@/components/wallet/TransferModal.vue'
+import { Button } from '@/components/ui/button'
+import { Head, Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import type { BreadcrumbItem } from '@/types'
 
@@ -34,5 +36,6 @@ const isTransferOpen = ref(false)
         </div>
 
         <DepositModal v-model:open="isDepositOpen" />
+        <TransferModal v-model:open="isTransferOpen" :wallet="wallet" />
     </AppLayout>
 </template>

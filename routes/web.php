@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\WalletController;
+use App\Http\Controllers\{TransactionController, WalletController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -21,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::controller(WalletController::class)->group(function () {
         Route::get('/wallet', 'index')->name('wallet.index');
         Route::post('/wallet/deposit', 'deposit')->name('wallet.deposit');
+        Route::post('/wallet/transfer', 'transfer')->name('wallet.transfer');
     });
 });
 
