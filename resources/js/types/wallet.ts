@@ -49,11 +49,29 @@ export interface TransferFormData {
     description: string
 }
 
-// Page
-export interface WalletIndexProps { // /wallet
-    wallet: Wallet
+export interface ReverseFormData {
+    reason: string
 }
 
+// Page
+export interface WalletIndexProps { // /wallet
+    wallet: Wallet,
+    transactions: {
+        data: Transaction[]
+        meta: {
+            current_page: number
+            last_page: number
+            per_page: number
+            total: number
+        }
+        links: {
+            first: string
+            last: string
+            prev: string | null
+            next: string | null
+        }
+    }
+}
 
 export interface TransactionShowProps {
     transaction: Transaction
