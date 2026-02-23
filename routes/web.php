@@ -23,6 +23,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/wallet/deposit', 'deposit')->name('wallet.deposit');
         Route::post('/wallet/transfer', 'transfer')->name('wallet.transfer');
     });
+
+    // Transactions
+    Route::controller(TransactionController::class)->group(function () {
+        Route::get('/transactions/{transaction}', 'show')->name('transactions.show');
+        Route::post('/transactions/{transaction}/reverse', 'reverse')->name('transactions.reverse');
+    });
 });
 
 require __DIR__.'/settings.php';
