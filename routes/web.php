@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Wallet
     Route::controller(WalletController::class)->group(function () {
         Route::get('/wallet', 'index')->name('wallet.index');
+        Route::post('/wallet/deposit', 'deposit')->name('wallet.deposit');
     });
 });
 
