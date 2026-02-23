@@ -16,4 +16,12 @@ enum TransactionType: string {
             self::Reversal => 'Estorno',
         };
     }
+
+    public function isCredit(): bool {
+        return in_array($this, [self::Deposit, self::TransferIn]);
+    }
+
+    public function isDebit(): bool {
+        return in_array($this, [self::TransferOut]);
+    }
 }

@@ -8,13 +8,21 @@ enum TransactionStatus: string {
     case Failed = 'failed';
     case Reversed = 'reversed';
 
-    public function label(): string
-    {
+    public function label(): string {
         return match ($this) {
             self::Pending => 'Pendente',
             self::Completed => 'Completo',
             self::Failed => 'Falhou',
             self::Reversed => 'Estornado',
+        };
+    }
+
+    public function badgeVariant(): string {
+        return match ($this) {
+            self::Pending => 'warning',
+            self::Completed => 'success',
+            self::Reversed => 'secondary',
+            self::Failed => 'destructive',
         };
     }
 }
