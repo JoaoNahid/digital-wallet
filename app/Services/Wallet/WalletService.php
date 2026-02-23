@@ -32,19 +32,23 @@ class WalletService
         $this->m_WalletRepository->updateBalance($p_Wallet, $p_Amount, 'debit');
     }
 
-    public function findWalletByEmail(string $email): ?Wallet {
-        return $this->m_WalletRepository->findByUserEmail($email);
+    public function findWalletByEmail(string $p_Email): ?Wallet {
+        return $this->m_WalletRepository->findByUserEmail($p_Email);
     }
 
-    public function validateNotSelfTransfer(Wallet $from, Wallet $to): void {
-        if ($from->id === $to->id) {
+    public function validateNotSelfTransfer(Wallet $p_From, Wallet $p_To): void {
+        if ($p_From->id === $p_To->id) {
             throw new SelfTransferException();
         }
     }
 
-    public function validateSufficientBalance(Wallet $wallet, float $amount): void {
-        if (!$wallet->hasSufficientBalance($amount)) {
-            throw new InsufficientBalanceException($wallet->balance, $amount);
+    public function validateSufficientBalance(Wallet $p_Wallet, float $p_Amount): void {
+        if (!$p_Wallet->hasSufficientBalance($p_Amount)) {
+            throw new InsufficientBalanceException($p_Wallet->balance, $p_Amount);
         }
+    }
+
+    public function getWalletByTransaction(string $p_TransactionId): Wallet {
+        return $this->m_WalletRepository->findByTransactionId($p_TransactionId);
     }
 }
