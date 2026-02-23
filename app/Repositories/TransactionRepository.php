@@ -60,7 +60,45 @@ class TransactionRepository implements TransactionRepositoryInterface
         return [$v_OutTransaction, $v_InTransaction];
     }
 
-    public function updateStatus(Transaction $transaction, TransactionStatus $status): void {
-        $transaction->update(['status' => $status]);
+    public function createReversal(Transaction $p_Original, ?string $p_Reason): Transaction {
+        $v_Wallet = $p_Original->wallet;
+        $v_IsCredit = $p_Original->type->isCredit();
+        $v_NewBalance = $v_IsCredit
+            ? $v_Wallet->balance - $p_Original->amount
+            : $v_Wallet->balance + $p_Original->amount;
+
+        return Transaction::create([
+            'wallet_id' => $v_Wallet->id,
+            'target_wallet_id' => $p_Original->target_wallet_id,
+            'type' => TransactionType::Reversal,
+            'amount' => $p_Original->amount,
+            'balance_before' => $v_Wallet->balance,
+            'balance_after' => $v_NewBalance,
+            'status' => TransactionStatus::Completed,
+            'reference_id' => $p_Original->id,
+            'description' => $p_Reason ?? 'Estorno de transação #' . $p_Original->id,
+        ]);
+    }
+
+    public function updateStatus(Transaction $p_Transaction, TransactionStatus $p_Status): void {
+        $p_Transaction->update(['status' => $p_Status]);
+    }
+
+    public function getPaginatedForWallet(
+        string $p_WalletId,
+        int $p_PerPage = 15
+    ): LengthAwarePaginator {
+        return Transaction::query()
+            ->forWallet($p_WalletId)
+            ->with('targetWallet.user:id,name,email')
+            ->latest()
+            ->paginate($p_PerPage);
+    }
+
+    public function markAsReversed(Transaction $p_Transaction): void {
+        $p_Transaction->update([
+            'status' => TransactionStatus::Reversed,
+            'reversed_at' => now(),
+        ]);
     }
 }

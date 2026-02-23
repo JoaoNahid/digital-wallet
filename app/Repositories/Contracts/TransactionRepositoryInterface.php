@@ -22,4 +22,13 @@ interface TransactionRepositoryInterface {
     ): array;
 
     public function updateStatus(Transaction $transaction, TransactionStatus $status): void;
+    
+    public function getPaginatedForWallet(
+        string $walletId,
+        int $perPage = 15
+    ): LengthAwarePaginator;
+    
+    public function createReversal(Transaction $original, ?string $reason): Transaction;
+
+    public function markAsReversed(Transaction $transaction): void;
 }

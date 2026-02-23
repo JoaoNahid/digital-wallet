@@ -4,9 +4,14 @@ namespace App\Models;
 
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
+use App\Policies\TransactionPolicy;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasOne};
 
+#[UsePolicy(TransactionPolicy::class)]
 class Transaction extends Model
 {
     Use HasUlids;
@@ -36,15 +41,37 @@ class Transaction extends Model
     ];
 
     // Relations
-    public function wallet() {
+    public function wallet(): BelongsTo {
         return $this->belongsTo(Wallet::class);
     }
 
-    public function targetWallet() {
+    public function targetWallet(): BelongsTo {
         return $this->belongsTo(Wallet::class, 'target_wallet_id');
     }
 
-    public function reference() {
+    public function originalTransaction(): BelongsTo {
         return $this->belongsTo(Transaction::class, 'reference_id');
+    }
+
+    public function reversalTransaction(): HasOne {
+        return $this->hasOne(Transaction::class, 'reference_id');
+    }
+
+    // Accessors
+
+    public function getFormattedAmountAttribute(): string {
+        $v_Prefix = $this->type->isCredit() ? '+' : '-';
+        return $v_Prefix . ' R$ ' . number_format($this->amount, 2, ',', '.');
+    }
+
+    public function getCanBeReversedAttribute(): bool {
+        return $this->status === TransactionStatus::Completed
+            && $this->reversed_at === null
+            && $this->type !== TransactionType::Reversal
+            && $this->created_at->gt(Carbon::now()->subHours(2));
+    }
+
+    public function scopeForWallet(Builder $p_Query, string $p_WalletId): Builder {
+        return $p_Query->where('wallet_id', $p_WalletId);
     }
 }
