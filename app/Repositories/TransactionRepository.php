@@ -101,4 +101,16 @@ class TransactionRepository implements TransactionRepositoryInterface
             'reversed_at' => now(),
         ]);
     }
+
+    public function existsTransferInPair(Transaction $p_Transaction): ?Transaction {
+        return Transaction::where('reference_id', $p_Transaction->id)
+            ->transferIn()
+            ->first();
+    }
+
+    public function existsTransferOutPair(Transaction $p_Transaction): ?Transaction {
+        return Transaction::where('id', $p_Transaction->reference_id)
+            ->transferOut()
+            ->first();
+    }
 }

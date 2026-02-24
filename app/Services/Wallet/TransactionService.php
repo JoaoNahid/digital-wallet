@@ -56,4 +56,17 @@ class TransactionService
     public function markAsReversed(Transaction $p_Transaction): void {
         $this->transactionRepository->markAsReversed($p_Transaction);
     }
+
+    public function getPairIfExists(Transaction $p_Transaction): Transaction|null {
+        if ($p_Transaction->type === TransactionType::TransferOut) {
+            return $this->transactionRepository->existsTransferInPair($p_Transaction);
+        }
+
+        if ($p_Transaction->type === TransactionType::TransferIn) {
+            return $this->transactionRepository->existsTransferOutPair($p_Transaction);
+        }
+
+        return null;
+        
+    }
 }

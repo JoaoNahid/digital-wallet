@@ -31,4 +31,8 @@ interface TransactionRepositoryInterface {
     public function createReversal(Transaction $original, ?string $reason): Transaction;
 
     public function markAsReversed(Transaction $transaction): void;
+
+    public function existsTransferInPair(Transaction $p_Transaction): ?Transaction;
+
+    public function existsTransferOutPair(Transaction $p_Transaction): ?Transaction;
 }
