@@ -30,7 +30,7 @@ class ReverseTransactionAction
             // 3. Create reversal transaction
             $v_Reversal = $this->m_TransactionRepository->createReversal($v_Original, $p_Dto->reason);
 
-            // 4. Update wallet balance (inverse operation)
+            // 4. Update wallet balance
             if ($v_Original->type->isCredit()) {
                 $this->m_WalletService->debitWallet($v_Wallet, $v_Original->amount);
             } else {
@@ -49,16 +49,23 @@ class ReverseTransactionAction
         });
     }
 
-    private function reverseTransferIn(Transaction $outTransaction, ?string $reason): void {
-        $inTransaction = Transaction::where('reference_id', $outTransaction->id)
-            ->where('type', TransactionType::TransferIn)
+    private function reverseTransferIn(Transaction $p_OutTransaction, ?string $p_Reason): void {
+        $v_InTransaction = Transaction::where('reference_id', $p_OutTransaction->id)
+            ->transferIn()
             ->first();
 
-        if ($inTransaction && $inTransaction->can_be_reversed) {
-            $targetWallet = $this->m_WalletService->getWalletWithLock($inTransaction->wallet_id);
-            $this->m_TransactionRepository->createReversal($inTransaction, $reason);
-            $this->m_WalletService->debitWallet($targetWallet, $inTransaction->amount);
-            $this->m_TransactionService->markAsReversed($inTransaction);
+        if ($v_InTransaction && $v_InTransaction->can_be_reversed) {
+            // 1. Lock target wallet
+            $v_TargetWallet = $this->m_WalletService->getWalletWithLock($v_InTransaction->wallet_id);
+
+            // 2. Create reversal transaction
+            $this->m_TransactionRepository->createReversal($v_InTransaction, $p_Reason);
+
+            // 3. Update wallet balance
+            $this->m_WalletService->debitWallet($v_TargetWallet, $v_InTransaction->amount);
+
+            // 4. Mark as reversed
+            $this->m_TransactionService->markAsReversed($v_InTransaction);
         }
     }
 }
