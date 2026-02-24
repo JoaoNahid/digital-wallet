@@ -74,4 +74,8 @@ class Transaction extends Model
     public function scopeForWallet(Builder $p_Query, string $p_WalletId): Builder {
         return $p_Query->where('wallet_id', $p_WalletId);
     }
+
+    public function scopeTransferIn(Builder $p_Query): Builder {
+        return $p_Query->where('type', TransactionType::TransferIn);
+    }
 }
