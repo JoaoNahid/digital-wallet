@@ -61,6 +61,9 @@ class Transaction extends Model
 
     public function getFormattedAmountAttribute(): string {
         $v_Prefix = $this->type->isCredit() ? '+' : '-';
+        if ($this->type === TransactionType::Reversal) {
+            $v_Prefix = !$this->originalTransaction->type->isCredit() ? '+' : '-';
+        }
         return $v_Prefix . ' R$ ' . number_format($this->amount, 2, ',', '.');
     }
 
@@ -77,5 +80,9 @@ class Transaction extends Model
 
     public function scopeTransferIn(Builder $p_Query): Builder {
         return $p_Query->where('type', TransactionType::TransferIn);
+    }
+
+    public function scopeTransferOut(Builder $p_Query): Builder {
+        return $p_Query->where('type', TransactionType::TransferOut);
     }
 }
