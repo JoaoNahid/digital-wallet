@@ -57,7 +57,7 @@ console.log(props.transaction.target_user);
 
                 <CardContent class="space-y-6">
                     <div class="text-center py-4">
-                        <p class="text-4xl font-bold" :class="getAmountColorClass(transaction.type)">
+                        <p class="text-4xl font-bold" :class="getAmountColorClass(transaction.formatted_amount)">
                             {{ transaction.formatted_amount }}
                         </p>
                         <p class="text-sm text-muted-foreground mt-2">

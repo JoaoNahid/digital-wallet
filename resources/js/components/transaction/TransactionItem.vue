@@ -69,7 +69,7 @@ const iconColorClass = computed(() => {
         </div>
 
         <div class="text-right">
-            <p class="font-medium" :class="getAmountColorClass(transaction.type)">
+            <p class="font-medium" :class="getAmountColorClass(transaction.formatted_amount)">
                 {{ transaction.formatted_amount }}
             </p>
             <TransactionBadge
