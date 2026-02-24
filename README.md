@@ -37,7 +37,7 @@ cd digital-wallet && cp .env.example .env
 composer install
 ```
 
-## Passo 4: Rodar o composer install
+## Passo 4: Rodar dependências do frontend
 ```bash
 npm install
 ```
@@ -51,7 +51,7 @@ docker compose up -d --build
 
 Rode as migrations:
 ```bash
-sail artisan:migrate
+php artisan:migrate
 ```
 
 ## Acessando o sistema
