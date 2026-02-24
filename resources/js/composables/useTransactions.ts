@@ -24,9 +24,9 @@ export function useTransactions(
         }).format(new Date(dateString))
     }
 
-    function getAmountColorClass(type: TransactionType): string {
-        const creditTypes: TransactionType[] = ['deposit', 'transfer_in']
-        return creditTypes.includes(type) ? 'text-green-600' : 'text-red-600'
+    function getAmountColorClass(formatted_amount: string): string {
+        const firstChar = formatted_amount.trim().charAt(0)
+        return firstChar === '+' ? 'text-green-600' : 'text-red-600'
     }
 
     return {
