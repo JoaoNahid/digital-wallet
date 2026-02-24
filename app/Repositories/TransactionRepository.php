@@ -60,23 +60,23 @@ class TransactionRepository implements TransactionRepositoryInterface
         return [$v_OutTransaction, $v_InTransaction];
     }
 
-    public function createReversal(Transaction $p_Original, ?string $p_Reason): Transaction {
-        $v_Wallet = $p_Original->wallet;
-        $v_IsCredit = $p_Original->type->isCredit();
+    public function createReversal(Transaction $p_Transaction, ?string $p_Reason): Transaction {
+        $v_Wallet = $p_Transaction->wallet;
+        $v_IsCredit = $p_Transaction->type->isCredit();
         $v_NewBalance = $v_IsCredit
-            ? $v_Wallet->balance - $p_Original->amount
-            : $v_Wallet->balance + $p_Original->amount;
+            ? $v_Wallet->balance - $p_Transaction->amount
+            : $v_Wallet->balance + $p_Transaction->amount;
 
         return Transaction::create([
             'wallet_id' => $v_Wallet->id,
-            'target_wallet_id' => $p_Original->target_wallet_id,
+            'target_wallet_id' => $p_Transaction->target_wallet_id,
             'type' => TransactionType::Reversal,
-            'amount' => $p_Original->amount,
+            'amount' => $p_Transaction->amount,
             'balance_before' => $v_Wallet->balance,
             'balance_after' => $v_NewBalance,
             'status' => TransactionStatus::Completed,
-            'reference_id' => $p_Original->id,
-            'description' => $p_Reason ?? 'Estorno de transação #' . $p_Original->id,
+            'reference_id' => $p_Transaction->id,
+            'description' => $p_Reason ?? 'Estorno de transação #' . $p_Transaction->id,
         ]);
     }
 
