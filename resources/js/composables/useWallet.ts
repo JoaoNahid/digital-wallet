@@ -1,5 +1,7 @@
 import type { Wallet } from '@/types/wallet'
 import { computed, toRef, type MaybeRefOrGetter } from 'vue'
+import { router } from '@inertiajs/vue3'
+
 
 export function useWallet(wallet: MaybeRefOrGetter<Wallet>) {
     const walletRef = toRef(wallet)
@@ -12,10 +14,24 @@ export function useWallet(wallet: MaybeRefOrGetter<Wallet>) {
         isNegative.value ? 'text-destructive' : 'text-foreground'
     )
 
+    function goToPage(page: number) {
+        router.get(
+            '/wallet',
+            {
+                page
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+            }
+        )
+    }
+
     return {
         wallet: walletRef,
         formattedBalance,
         isNegative,
         balanceColorClass,
+        goToPage
     }
 }
