@@ -66,8 +66,6 @@ export function useTransfer(wallet: MaybeRefOrGetter<Wallet>) {
     watch(() => form.recipient_email, searchRecipient)
 
     function submit(onSuccess?: () => void) {
-        console.log(form);
-        
         form.post('/wallet/transfer', {
             preserveScroll: true,
             onSuccess: () => {
@@ -78,6 +76,7 @@ export function useTransfer(wallet: MaybeRefOrGetter<Wallet>) {
         })
     }
 
+    // Reset form state
     function reset() {
         form.reset()
         form.clearErrors()
