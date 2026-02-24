@@ -29,7 +29,7 @@ git clone git@github.com:JoaoNahid/digital-wallet.git
 ## Passo 2: Acessar o projeto e configurar o .env
 
 ```bash
-cd digital-wallet && cp .env-example .env
+cd digital-wallet && cp .env.example .env
 ```
 
 ## Passo 3: Rodar o composer install
@@ -37,12 +37,17 @@ cd digital-wallet && cp .env-example .env
 composer install
 ```
 
-## Passo 4: Rodar o container MySQL
+## Passo 4: Rodar o composer install
+```bash
+npm install
+```
+
+## Passo 5: Rodar o container MySQL
 ```bash
 docker compose up -d --build
 ```
 
-## Passo 5: Banco de dados
+## Passo 6: Banco de dados
 
 Rode as migrations:
 ```bash
