@@ -35,10 +35,6 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $p_Input['password'],
         ]);
 
-        if ($v_User) {
-            $this->m_CreateWalletAction->execute($v_User);
-        }
-
         return $v_User;
     }
 }
